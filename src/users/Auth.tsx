@@ -1,6 +1,15 @@
 import { Component } from "react";
+import { Form, FormGroup, Label, Input, Button } from "reactstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { Container, Row, Col } from 'reactstrap';
+import { Header } from "../common";
 
-type AuthProps = {}
+const eye = <FontAwesomeIcon icon={faEye} />;
+
+type AuthProps = {
+    updateToken: (newToken: string) => void;
+}
 type AuthState = {
     signup: boolean,
     email: string,
@@ -8,6 +17,8 @@ type AuthState = {
     isAdmin: boolean,
     errorText: string,
     loggedIn: boolean,
+    passwordShown: boolean,
+    sessionToken: string
 }
 
 export class Auth extends Component<AuthProps, AuthState> {
@@ -19,8 +30,14 @@ export class Auth extends Component<AuthProps, AuthState> {
             password: '',
             isAdmin: false,
             errorText: '',
-            loggedIn: false
+            loggedIn: false,
+            passwordShown: false,
+            sessionToken: ''
         }
+    }
+
+    togglePasswordVisibility = () => {
+        this.setState({passwordShown: this.state.passwordShown ? false : true});
     }
 
     handleSubmit = async () => {
@@ -38,12 +55,14 @@ export class Auth extends Component<AuthProps, AuthState> {
             const res = await fetch(apiURL, {
                 method: "POST",
                 body: JSON.stringify(reqBody),
-                headers: {
+                headers: new Headers ({
                     "Content-Type": "application/json"
-                },
+                }),
             })
 
             const json = await res.json();
+            const sessionToken = json.sessionToken;
+            this.props.updateToken(sessionToken);
 
             if (json.errors) {
                 let errMsg = json.errors[0].message
@@ -66,38 +85,52 @@ export class Auth extends Component<AuthProps, AuthState> {
         this.setState({password: e.target.value})
     }
 
-    // componentDidMount(){
-    //     this.props.isClass(Boolean(Auth?.prototype?.render))
-    // }
-
     render() {
         return(
-            <>
-            <p style={{ margin: 0, fontSize: '.5em' }}>{this.state.errorText}</p>
-                <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={(e) => {
-                    e.preventDefault()
-                    this.handleSubmit()}}>
+            <Container className='auth-container'>
+                <Row>
+                    <Col md='12'>
+                        <h1>Welcome to:</h1>
+                        <Header header="RuPaul's Next Race" />
+                        <h3>The time has come...for you to sign up...for...your...LEGACY!</h3>
+                        <p style={{ margin: 0, fontSize: '.5em' }}>{this.state.errorText}</p>
+                        <Form 
+                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '30vh' }} 
+                        onSubmit={(e) => {
+                            e.preventDefault()
+                            this.handleSubmit()}}>
 
-                    <div style={{ display: 'flex', position: 'relative' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <label htmlFor='email'>Email</label>
-                            <input style={{ position: 'relative' }} required type='email' name='email' id='email' onChange={(e) => { this.handleEmail(e) }} />
-                        </div>
-                    </div>
+                            <FormGroup 
+                            style={{ display: 'flex', flexDirection: 'column', position: 'relative', justifyContent: 'flex-start', width: '25%', height: '5vh' }}
+                            >
+                                <Label style={{ display: 'flex', justifyContent: 'flex-start' }} htmlFor='email'>Email:</Label>
+                                <Input 
+                                style={{ position: 'relative' }} 
+                                required type='email' name='email' id='email' onChange={(e) => { this.handleEmail(e) }} value={this.state.email} />
+                            </FormGroup>
+                            <br/>
+                            <FormGroup 
+                            style={{ display: 'flex', flexDirection: 'column', position: 'relative', justifyContent: 'flex-start', width: '25%', height: '5vh' }}
+                            >
+                                <Label style={{ display: 'flex', justifyContent: 'flex-start' }} htmlFor='password'>Password:</Label>
+                                <Input 
+                                style={{ position: 'relative' }} 
+                                required type={this.state.passwordShown ? "text" : "password"} pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" id='password' onChange={(e) => { this.handlePassword(e) }} name="password" value={this.state.password} />
+                                <i style={{ position: 'absolute', textAlign: 'right', width: '10%', right: '2%' }} onClick={this.togglePasswordVisibility}>{eye}</i>
+                            </FormGroup>
+                            <br/>
+                            <FormGroup
+                            style={{ display: 'flex', flexDirection: 'row', position: 'relative', justifyContent: 'center' }}
+                            >
+                                <Button type='submit' style={{ margin: '1em', width: '100%' }}>{this.state.signup ? 'Signup' : 'Login'} </Button>
 
-                    <div style={{ display: 'flex', position: 'relative' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <label htmlFor='password'>Password</label>
-                            <input required type='password' id='password' onChange={(e) => { this.handlePassword(e) }} />
-                        </div>
-                    </div>
+                                <Button type='button' style={{ margin: '1em', width: '100%' }} onClick={() => this.setState({signup: !this.state.signup})}>{this.state.signup ? 'Need to Login?' : 'Need to Signup?'}</Button>
+                            </FormGroup>
 
-                    <button type='button' style={{ margin: '1em' }} onClick={() => this.setState({signup: !this.state.signup})}>{this.state.signup ? 'Need to Login?' : 'Need to Signup?'}</button>
-
-                    <button type='submit' style={{ margin: '1em' }}>{this.state.signup ? 'Signup' : 'Login'} </button>
-
-                </form>
-            </>
+                        </Form>
+                    </Col>
+                </Row>
+            </Container>
         )
     }
 }

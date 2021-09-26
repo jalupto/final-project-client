@@ -1,15 +1,15 @@
 import React from 'react';
 
 type HeaderProps = {
-    brand: string
+    header: string
 }
 //Component <Props, State>
 export class Header extends React.Component<HeaderProps, {}> {
     render() {
-        const { brand } = this.props
+        const { header } = this.props
         return(
             <nav>
-                <h1> { brand } </h1>
+                <h1> { header } </h1>
             </nav>
         )
     }
