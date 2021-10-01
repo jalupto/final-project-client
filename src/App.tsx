@@ -1,13 +1,14 @@
 import { Component } from "react";
 import "./App.css";
 import { Footer, Home, Navbar } from "./common";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Auth } from "./users";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { VoteIndex } from "./votes";
 import { FavIndex } from "./favorites";
 
 type AppState = {
-  sessionToken: string;
+  sessionToken: string | null
 };
 
 class App extends Component<{}, AppState> {
@@ -27,11 +28,19 @@ class App extends Component<{}, AppState> {
 
   protectedViews = () => {
     return this.state.sessionToken === localStorage.getItem("token") ? (
-      <Home />
+      <Home 
+      sessionToken={this.state.sessionToken} 
+      />
     ) : (
       <Auth updateToken={this.updateToken} />
     );
   };
+
+  componentDidMount = () => {
+    if(localStorage.getItem('token')){
+      this.setState({sessionToken: localStorage.getItem('token')})
+    }
+  }
 
   render() {
     return (
@@ -60,6 +69,9 @@ class App extends Component<{}, AppState> {
                 />
             </Route>
           </Switch>
+          <br/>
+          <br/>
+          <br/>
           <Footer footer="Jared Upton 2021 - Powered by No Key No Shade API" />
         </div>
       </Router>

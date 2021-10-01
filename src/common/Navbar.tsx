@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 type NavProps = {
     clearToken(): void;
-    sessionToken: string;
+    sessionToken: string | null;
 }
 
 export class Navbar extends Component<NavProps> {
@@ -13,13 +13,13 @@ export class Navbar extends Component<NavProps> {
     render() {
         return (
             <div className='navContainer'>
-                <div className='navbar'>
+                <div className='navbar' style={{justifyContent: 'center'}}>
                     <Link to='/' className='link'>Home</Link>
                     <Link to='/votes' className='link'>Votes</Link>
                     <Link to='/favs' className='link'>Favs</Link>
                     {
                         this.props.sessionToken ?
-                        <button style={{ padding: '1em' }} onClick={() => this.props.clearToken()}>Logout</button>
+                        <button style={{ padding: '0.5em' }} onClick={() => this.props.clearToken()}>Logout</button>
                         :
                         null
                     }

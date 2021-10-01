@@ -1,5 +1,42 @@
 import { Component } from "react";
+import { Table } from "reactstrap";
 
-export class FavTable extends Component {
-    
+type TableProps = {
+    favs: FavQueen[]
+}
+
+type FavQueen = {
+    id: number,
+    queen: string,
+    season: string
+}
+
+export class FavTable extends Component<TableProps> {
+
+    favMapper = (): JSX.Element[] => {
+        return this.props.favs.map((fav: FavQueen, index: number) => {
+            return(
+                <tr key={index}>
+                    <th scope='row'>{fav.id}</th>
+                    <td>{fav.queen}</td>
+                    <td>{fav.season}</td>
+                </tr>
+            )
+        })
+    }
+
+    render(){
+        return(
+            <Table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Queen</th>
+                        <th>Season</th>
+                    </tr>
+                </thead>
+                <tbody>{this.favMapper()}</tbody>
+            </Table>
+        )
+    }
 }

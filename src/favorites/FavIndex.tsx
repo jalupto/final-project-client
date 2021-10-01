@@ -1,22 +1,56 @@
 import { Component } from "react";
 import { Auth } from "../users";
+import { FavTable } from "./FavTable";
 
 type FavProps = {
-    sessionToken: string;
+    sessionToken: string | null;
     updateToken: (newToken: string) => void;
 }
 
-export class FavIndex extends Component<FavProps> {
+type FavState = {
+    favs: FavQueen[]
+}
+
+type FavQueen = {
+    id: number,
+    queen: string,
+    season: string
+}
+
+export class FavIndex extends Component<FavProps, FavState> {
+    constructor(props: FavProps){
+        super(props)
+        this.state = {
+            favs: []
+        }
+    }
+
+    fetchFavs = async () => {
+        const res = await fetch(`http://localhost:3000/favs/`, {
+            method: 'GET',
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${this.props.sessionToken}`
+            })
+        })
+        const response = await res.json();
+        this.setState({favs: response});
+        console.log(this.state.favs);
+    };
+
     render(){
         return(
             <div className='favContainer'>
                 <div className='favIndex'>
                     {
                         this.props.sessionToken ?
-                        <h3>Favs will go here.</h3>
+                        <FavTable 
+                        favs={this.state.favs} 
+                        />
                         : <Auth updateToken={this.props.updateToken} />
                     }
                 </div>
+                <button onClick={() => this.fetchFavs()}>Fetch Queens</button>
             </div>
         )
     }

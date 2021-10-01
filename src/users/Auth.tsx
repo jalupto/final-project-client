@@ -99,7 +99,6 @@ export class Auth extends Component<AuthProps, AuthState> {
                         onSubmit={(e) => {
                             e.preventDefault()
                             this.handleSubmit()}}>
-
                             <FormGroup 
                             style={{ display: 'flex', flexDirection: 'column', position: 'relative', justifyContent: 'flex-start', width: '25%', height: '5vh' }}
                             >
@@ -108,6 +107,7 @@ export class Auth extends Component<AuthProps, AuthState> {
                                 style={{ position: 'relative' }} 
                                 required type='email' name='email' id='email' onChange={(e) => { this.handleEmail(e) }} value={this.state.email} />
                             </FormGroup>
+                            <br/>
                             <br/>
                             <FormGroup 
                             style={{ display: 'flex', flexDirection: 'column', position: 'relative', justifyContent: 'flex-start', width: '25%', height: '5vh' }}
@@ -119,14 +119,13 @@ export class Auth extends Component<AuthProps, AuthState> {
                                 <i style={{ position: 'absolute', textAlign: 'right', width: '10%', right: '2%' }} onClick={this.togglePasswordVisibility}>{eye}</i>
                             </FormGroup>
                             <br/>
+                            <br/>
                             <FormGroup
                             style={{ display: 'flex', flexDirection: 'row', position: 'relative', justifyContent: 'center' }}
                             >
                                 <Button type='submit' style={{ margin: '1em', width: '100%' }}>{this.state.signup ? 'Signup' : 'Login'} </Button>
-
                                 <Button type='button' style={{ margin: '1em', width: '100%' }} onClick={() => this.setState({signup: !this.state.signup})}>{this.state.signup ? 'Need to Login?' : 'Need to Signup?'}</Button>
                             </FormGroup>
-
                         </Form>
                     </Col>
                 </Row>

@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { Auth } from "../users";
+import { VoteTable } from "./VoteTable";
 
 type VoteProps = {
     sessionToken: string;
@@ -13,7 +14,7 @@ export class VoteIndex extends Component<VoteProps> {
                 <div className='voteIndex'>
                     {
                         this.props.sessionToken ?
-                        <h3>Votes will go here.</h3>
+                        <VoteTable />
                         : <Auth updateToken={this.props.updateToken} />
                     }
                 </div>
