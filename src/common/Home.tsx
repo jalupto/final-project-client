@@ -2,6 +2,7 @@ import { Component } from "react";
 import { Card, CardImg, CardBody, CardTitle, CardText } from 'reactstrap';
 import { Container, Row, Col, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Grid } from "@material-ui/core";
+import APIURL from '../helpers/environment';
 
 type HomeProps = {
     sessionToken: string | null
@@ -41,7 +42,7 @@ export class Home extends Component<HomeProps, HomeState> {
     }
 
     saveQueen = async (queen: Queen) => {
-        const res = await fetch(`http://localhost:3000/favs/`, {
+        const res = await fetch(`${APIURL}/favs/`, {
             method: "POST",
             body: JSON.stringify({
                 favs: {

@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { Container, Row, Col } from 'reactstrap';
 import { Header } from "../common";
+import APIURL from '../helpers/environment';
 
 const eye = <FontAwesomeIcon icon={faEye} />;
 
@@ -41,7 +42,7 @@ export class Auth extends Component<AuthProps, AuthState> {
     }
 
     handleSubmit = async () => {
-        const apiURL = `http://localhost:3000/users/${this.state.signup ? 'register' : 'login'}`;
+        const apiURL = `${APIURL}/users/${this.state.signup ? 'register' : 'login'}`;
         console.info(apiURL);
 
         const reqBody = {

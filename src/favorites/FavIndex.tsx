@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { Auth } from "../users";
 import { FavTable } from "./FavTable";
+import APIURL from '../helpers/environment';
 
 type FavProps = {
     sessionToken: string | null;
@@ -26,7 +27,7 @@ export class FavIndex extends Component<FavProps, FavState> {
     }
 
     fetchFavs = async () => {
-        const res = await fetch(`http://localhost:3000/favs/`, {
+        const res = await fetch(`${APIURL}/favs/`, {
             method: 'GET',
             headers: new Headers({
                 "Content-Type": "application/json",
