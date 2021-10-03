@@ -47,11 +47,11 @@ export class FavIndex extends Component<FavProps, FavState> {
                         this.props.sessionToken ?
                         <FavTable 
                         favs={this.state.favs} 
+                        fetchFavs={this.fetchFavs}
                         />
                         : <Auth updateToken={this.props.updateToken} />
                     }
                 </div>
-                <button onClick={() => this.fetchFavs()}>Fetch Queens</button>
             </div>
         )
     }

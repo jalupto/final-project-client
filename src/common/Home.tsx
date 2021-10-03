@@ -13,7 +13,6 @@ type HomeState = {
     dropOpen1: boolean,
     dropOpen2: boolean
     season: number,
-    seasonId: string
 }
 
 type Queen = {
@@ -36,12 +35,11 @@ export class Home extends Component<HomeProps, HomeState> {
             results: [],
             dropOpen1: false,
             dropOpen2: false,
-            season: 17,
-            seasonId: 'A5'
+            season: 0,
         }
     }
 
-    saveQueen = async (queen: Queen) => {
+    faveQueen = async (queen: Queen) => {
         const res = await fetch(`${APIURL}/favs/`, {
             method: "POST",
             body: JSON.stringify({
@@ -60,10 +58,29 @@ export class Home extends Component<HomeProps, HomeState> {
         console.log(queen.seasons[0].seasonNumber);
     }
 
+    voteQueen = async (queen: Queen) => {
+        const res = await fetch(`${APIURL}/votes/`, {
+            method: "POST",
+            body: JSON.stringify({
+                votes: {
+                    queen: queen.name,
+                    season: queen.seasons[0].seasonNumber
+                },
+            }),
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${this.props.sessionToken}`
+            }),
+        })
+        const response = await res.json();
+        console.log(response);
+        console.log(queen.seasons[0].seasonNumber);
+    }
+
     toggle1 = () => this.setState({dropOpen1: !this.state.dropOpen1})
     toggle2 = () => this.setState({dropOpen2: !this.state.dropOpen2})
 
-    getQueens = async (season = 17) => {
+    getQueens = async (season = 0) => {
         const res = await fetch(
             `http://www.nokeynoshade.party/api/seasons/${season}/queens`, {
                 method: 'GET'
@@ -75,9 +92,9 @@ export class Home extends Component<HomeProps, HomeState> {
         console.log(this.state.results[0].seasons[0].seasonNumber);
     }
 
-    componentDidMount() {
-        this.getQueens();
-    }
+    // componentDidMount() {
+    //     this.getQueens();
+    // }
 
     queenMapper = (): JSX.Element[] => {
         return this.state.results.map((queen: Queen, index: number) => {
@@ -100,8 +117,11 @@ export class Home extends Component<HomeProps, HomeState> {
                             :
                             null
                             }
-                            <button onClick={() => this.saveQueen(queen)}>
-                                SAVE
+                            <button onClick={() => this.faveQueen(queen)}>
+                                FAVE
+                            </button>
+                            <button onClick={() => this.voteQueen(queen)}>
+                                VOTE
                             </button>
                         </CardBody>
                     </Card>
@@ -111,8 +131,6 @@ export class Home extends Component<HomeProps, HomeState> {
     }
 
     render() {
-        // const seasonId = this.state.results[0].seasons[0].seasonNumber;
-        // this.setState({seasonId: seasonId});
         return (
             <div className="homeContainer">
                 <div className="homeDiv">
@@ -159,8 +177,6 @@ export class Home extends Component<HomeProps, HomeState> {
                                 </Col>
                             </Row>
                         </Container>
-                        <br/>
-                        {/* <h4>Season: {seasonNumber}</h4> */}
                         <br/>
                         <Grid container spacing={4} direction='row' justifyContent='center' alignItems='center' className='resultContainer'>
                                 {this.queenMapper()}

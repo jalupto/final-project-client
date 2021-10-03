@@ -2,7 +2,8 @@ import { Component } from "react";
 import { Table } from "reactstrap";
 
 type TableProps = {
-    favs: FavQueen[]
+    favs: FavQueen[];
+    fetchFavs(): void;
 }
 
 type FavQueen = {
@@ -23,6 +24,10 @@ export class FavTable extends Component<TableProps> {
                 </tr>
             )
         })
+    }
+
+    componentDidMount() {
+        this.props.fetchFavs();
     }
 
     render(){

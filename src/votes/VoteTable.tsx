@@ -1,24 +1,47 @@
 import { Component } from "react";
-import { DataGrid, GridRowsProp, GridColDef } from '@material-ui/data-grid';
+import { Table } from "reactstrap";
 
-const rows: GridRowsProp = [
-    { id: 1, col1: 'Aquaria', col2: '10' },
-    { id: 2, col1: 'Adore Delano', col2: '6' },
-    { id: 3, col1: 'Crystal Methyd', col2: '12' }
-];
+type TableProps = {
+    votes: VoteQueen[];
+    fetchVotes(): void;
+}
 
-const columns: GridColDef[] = [
-    { field: 'id', hide: true },
-    { field: 'col1', headerName: 'Queen', width: 150 },
-    { field: 'col2', headerName: 'Season', width: 150 }
-]
+type VoteQueen = {
+    id: number,
+    queen: string,
+    season: string
+}
 
-export class VoteTable extends Component {
+export class VoteTable extends Component<TableProps> {
+
+    voteMapper = (): JSX.Element[] => {
+        return this.props.votes.map((vote: VoteQueen, index: number) => {
+            return(
+                <tr key={index}>
+                    <th scope='row'>{vote.id}</th>
+                    <td>{vote.queen}</td>
+                    <td>{vote.season}</td>
+                </tr>
+            )
+        })
+    }
+
+    componentDidMount() {
+        this.props.fetchVotes();
+    }
+
     render(){
         return(
-            <div style={{ height: 300, width: '100%' }}>
-                <DataGrid rows={rows} columns={columns} />
-            </div>
+            <Table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Queen</th>
+                        <th>Season</th>
+                    </tr>
+                </thead>
+                <tbody>{this.voteMapper()}</tbody>
+            </Table>
         )
     }
 }
