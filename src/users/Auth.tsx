@@ -10,6 +10,7 @@ const eye = <FontAwesomeIcon icon={faEye} />;
 
 type AuthProps = {
     updateToken: (newToken: string) => void;
+    updateAdmin: (newAdmin: string) => void;
 }
 type AuthState = {
     signup: boolean,
@@ -48,7 +49,8 @@ export class Auth extends Component<AuthProps, AuthState> {
         const reqBody = {
             user: {
                 email: this.state.email,
-                password: this.state.password
+                password: this.state.password,
+                isAdmin: this.state.isAdmin
             }
         }
         console.log(reqBody);
@@ -63,7 +65,9 @@ export class Auth extends Component<AuthProps, AuthState> {
 
             const json = await res.json();
             const sessionToken = json.sessionToken;
+            const admin = '' + json.user.isAdmin;
             this.props.updateToken(sessionToken);
+            this.props.updateAdmin(admin);
 
             if (json.errors) {
                 let errMsg = json.errors[0].message
@@ -91,10 +95,12 @@ export class Auth extends Component<AuthProps, AuthState> {
             <Container className='auth-container'>
                 <Row>
                     <Col md='12'>
-                        <h1>Welcome to:</h1>
-                        <Header header="RuPaul's Next Race" />
-                        <h3>The time has come...for you to sign up...for...your...LEGACY!</h3>
-                        <p style={{ margin: 0, fontSize: '.5em' }}>{this.state.errorText}</p>
+                        <div className='greeting'>
+                            <h1>Welcome to:</h1>
+                            <Header header="RuPaul's Next Race" />
+                            <h3>The time has come...for you to sign up...for...your...LEGACY!</h3>
+                            <p style={{ margin: 0, fontSize: '.5em' }}>{this.state.errorText}</p>
+                        </div>
                         <Form 
                         style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '30vh' }} 
                         onSubmit={(e) => {
@@ -124,8 +130,8 @@ export class Auth extends Component<AuthProps, AuthState> {
                             <FormGroup
                             style={{ display: 'flex', flexDirection: 'row', position: 'relative', justifyContent: 'center' }}
                             >
-                                <Button type='submit' style={{ margin: '1em', width: '100%' }}>{this.state.signup ? 'Signup' : 'Login'} </Button>
-                                <Button type='button' style={{ margin: '1em', width: '100%' }} onClick={() => this.setState({signup: !this.state.signup})}>{this.state.signup ? 'Need to Login?' : 'Need to Signup?'}</Button>
+                                <Button type='submit' style={{ margin: '1em', width: '100%', backgroundColor: '#37acde', color: '#5d3882' }}>{this.state.signup ? 'Signup' : 'Login'} </Button>
+                                <Button type='button' style={{ margin: '1em', width: '100%', backgroundColor: '#37acde', color: '#5d3882' }} onClick={() => this.setState({signup: !this.state.signup})}>{this.state.signup ? 'Need to Login?' : 'Need to Signup?'}</Button>
                             </FormGroup>
                         </Form>
                     </Col>

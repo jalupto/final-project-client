@@ -1,8 +1,115 @@
+body {
+  background: url('./assets/rpbg.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.navContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 1rem;
+}
+
+.logout {
+  background-color: #37acde;
+  color: #5d3882;
+  border-radius: .25rem;
+}
+
+.auth-container, .homeContainer {
+  padding-top: 20vh;
+}
+
+.greeting {
+  position: relative;
+  right: 10vw;
+  width: 110vw;
+  background: rgba(0,0,0,0.5);
+  color: white;
+}
+
+.homeText {
+  background: rgba(0,0,0,0.5);
+  color: white;
+}
+
+/* .drop1, .drop2 {
+  
+} */
+
 .App {
   text-align: center;
+  color: rgb(186, 62, 207);
 }
 
 .link {
   padding: 1em;
   text-decoration: none;
+  color: #5d3882;
+}
+
+.fave-btn, .vote-btn {
+  transition: transform 500ms ease;
+}
+
+.fave-btn:hover, .vote-btn:hover {
+  transform: scale(1.03);
+}
+
+.resultContainer {
+  padding: 3em
+}
+
+.card {
+  width: 40ch;
+  min-height: 85vh;
+  max-height: 85vh;
+  padding-bottom: 3em;
+  font-size: small;
+  transition: transform 500ms ease;
+}
+
+.card:hover {
+  transform: scale(1.03);
+}
+
+.photo {
+  min-height: 70vh;
+  max-height: 70vh;
+}
+
+.card-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 82.75%;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  border-radius: .25rem;
+  opacity: 0;
+  transition: 500ms;
+}
+
+.card-content > * {
+  transform: translateY(20vh);
+  transition: 500ms;
+}
+
+.card-content:hover {
+  opacity: 1;
+}
+
+.card-content:hover > * {
+  transform: translateY(0);
+}
+
+.table {
+  background: rgba(0,0,0,0.5)
+}
+
+.table-head, .table-body {
+  color: white;
 }

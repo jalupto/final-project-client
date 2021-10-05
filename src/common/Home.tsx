@@ -1,7 +1,7 @@
 import { Component } from "react";
 import { Card, CardImg, CardBody, CardTitle, CardText } from 'reactstrap';
 import { Container, Row, Col, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { Grid } from "@material-ui/core";
+import { Grid, Button } from "@material-ui/core";
 import APIURL from '../helpers/environment';
 
 type HomeProps = {
@@ -35,7 +35,7 @@ export class Home extends Component<HomeProps, HomeState> {
             results: [],
             dropOpen1: false,
             dropOpen2: false,
-            season: 0,
+            season: 17,
         }
     }
 
@@ -56,6 +56,7 @@ export class Home extends Component<HomeProps, HomeState> {
         const response = await res.json();
         console.log(response);
         console.log(queen.seasons[0].seasonNumber);
+        alert(`Saved ${queen.name} to Favs!`);
     }
 
     voteQueen = async (queen: Queen) => {
@@ -75,12 +76,13 @@ export class Home extends Component<HomeProps, HomeState> {
         const response = await res.json();
         console.log(response);
         console.log(queen.seasons[0].seasonNumber);
+        alert(`Saved ${queen.name} to Votes!`);
     }
 
     toggle1 = () => this.setState({dropOpen1: !this.state.dropOpen1})
     toggle2 = () => this.setState({dropOpen2: !this.state.dropOpen2})
 
-    getQueens = async (season = 0) => {
+    getQueens = async (season = 17) => {
         const res = await fetch(
             `http://www.nokeynoshade.party/api/seasons/${season}/queens`, {
                 method: 'GET'
@@ -92,21 +94,27 @@ export class Home extends Component<HomeProps, HomeState> {
         console.log(this.state.results[0].seasons[0].seasonNumber);
     }
 
-    // componentDidMount() {
-    //     this.getQueens();
-    // }
+    componentDidMount() {
+        this.getQueens();
+    }
+
+    componentWillUnmount() {
+        this.getQueens();
+    }
 
     queenMapper = (): JSX.Element[] => {
         return this.state.results.map((queen: Queen, index: number) => {
             return(
                 <Grid item xs={12} sm={3} key={index}>
                     <Card className='card'>
+                        <CardImg 
+                        // top width='25%' 
+                        className='photo' alt='queen photo' 
+                        src={queen.image_url} />
                         <CardBody className='card-content'>
                             <CardTitle tag='h2' className='card-title'>{queen.name}</CardTitle>
-                            <CardImg 
-                            top width='25%' className='photo' alt='queen photo' 
-                            src={queen.image_url} />
-                            <CardText>{queen.quote}</CardText>
+                            <CardText className='quote'>{queen.quote}</CardText>
+                            <div className='title'>
                             {queen.winner === true ?
                             <h4>WINNER</h4>
                             :
@@ -117,13 +125,18 @@ export class Home extends Component<HomeProps, HomeState> {
                             :
                             null
                             }
-                            <button onClick={() => this.faveQueen(queen)}>
-                                FAVE
-                            </button>
-                            <button onClick={() => this.voteQueen(queen)}>
-                                VOTE
-                            </button>
+                            </div>
                         </CardBody>
+                        <Button className='fave-btn' 
+                        style={{backgroundColor:'#37acde', color: '#5d3882', margin: '1em', position: 'absolute', bottom: '1em', left: '2em'}} 
+                        onClick={() => this.faveQueen(queen)}>
+                            FAVE
+                        </Button>
+                        <Button className='vote-btn' 
+                        style={{backgroundColor:'#946dde', color: '#5d3882', margin: '1em', position: 'absolute', bottom: '1em', right: '2em'}} 
+                        onClick={() => this.voteQueen(queen)}>
+                            VOTE
+                        </Button>
                     </Card>
                 </Grid>
             )
@@ -135,13 +148,15 @@ export class Home extends Component<HomeProps, HomeState> {
             <div className="homeContainer">
                 <div className="homeDiv">
                     <div className="homeView">
-                        <h1>Hello, Hello, Hello!</h1>
-                        <h3>Vote for who you'd like to see on the next All Stars!</h3>
-                        <p>Current database only goes up to All Stars 5</p>
+                        <div className="homeText">
+                            <h1>Hello, Hello, Hello!</h1>
+                            <h3>Vote for who you'd like to see on the next All Stars!</h3>
+                            <p>Current database only goes up to All Stars 5</p>
+                        </div>
                         <Container>
                             <Row className='justify-content-md-center'>
                                 <Col md='3'>
-                                    <Dropdown isOpen={this.state.dropOpen1} toggle={this.toggle1}>
+                                    <Dropdown className='drop1' isOpen={this.state.dropOpen1} toggle={this.toggle1}>
                                         <DropdownToggle caret>
                                             Seasons
                                         </DropdownToggle>
@@ -162,7 +177,7 @@ export class Home extends Component<HomeProps, HomeState> {
                                     </Dropdown>
                                 </Col>
                                 <Col md='3'>
-                                    <Dropdown isOpen={this.state.dropOpen2} toggle={this.toggle2}>
+                                    <Dropdown className='drop2' isOpen={this.state.dropOpen2} toggle={this.toggle2}>
                                         <DropdownToggle caret>
                                             All Stars
                                         </DropdownToggle>
