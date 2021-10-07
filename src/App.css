@@ -19,15 +19,10 @@ body {
   padding-top: 20vh;
 }
 
-.greeting {
-  position: relative;
+.greeting, .homeText {
   background: rgba(0,0,0,0.5);
   color: white;
-}
-
-.homeText {
-  background: rgba(0,0,0,0.5);
-  color: white;
+  font-family: 'Fugaz One';
 }
 
 /* .drop1, .drop2 {
@@ -86,6 +81,7 @@ body {
   height: 82.75%;
   background: rgba(0,0,0,0.6);
   color: white;
+  font-family: 'Baloo Da 2';
   border-radius: .25rem;
   opacity: 0;
   transition: 500ms;
